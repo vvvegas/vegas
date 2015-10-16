@@ -1,0 +1,24 @@
+<configuration>
+    <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <file>/var/log/resin/vegas/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                /var/log/resin/vegas/application.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.vegas.vegas" additivity="false">
+        <appender-ref ref="File"/>
+    </logger>
+
+</configuration>
