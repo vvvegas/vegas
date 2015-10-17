@@ -21,13 +21,35 @@
 
     <mvc:annotation-driven/>
 
-    <context:component-scan base-package="com.vegas"/>
+    <context:component-scan base-package="com.vegas.vegas"/>
     <context:property-placeholder location="classpath:app.properties"/>
 
     <aop:config proxy-target-class="true"/>
     <aop:aspectj-autoproxy/>
 
     <tx:annotation-driven/>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="${mysql.url}"/>
+        <property name="user" value="${mysql.user}"/>
+        <property name="password" value="${mysql.password}"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="com.vegas.vegas.model"/>
+        <property name="typeHandlersPackage" value="com.vegas.vegas.type"/>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.vegas.vegas.mapper"/>
+    </bean>
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="order" value="1"/>
